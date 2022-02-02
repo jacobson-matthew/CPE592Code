@@ -3,25 +3,23 @@ from PIL import Image
 
 im = Image.open("blue.jpg")
 
-def pixelTest():
-    pixels = im.load()
+# def pixelTest():
+#     pixels = im.load()
 
-    mypixels = []
+#     mypixels = []
 
-    for i in range(0, 10): 
-            mypixels.append(pixels[i, 0])
+#     for i in range(0, 10): 
+#             mypixels.append(pixels[i, 0])
             
-    for x in mypixels : 
-        for z in str(x)[1:-1].split(','):
-            value = list(str(bin(int(z))))
-            value[-1] = "1"
-            ''.join(value)
-            print(value)
-        print(" ")
+#     for x in mypixels : 
+#         for z in str(x)[1:-1].split(','):
+#             value = list(str(bin(int(z))))
+#             value[-1] = "1"
+#             ''.join(value)
+#             print(value)
+#         print(" ")
         
-        
-        
-        
+
         
   
 # def binarychangelsb(binary,bit):
@@ -35,7 +33,16 @@ def pixelTest():
 #     modbin[-1] = str(bit)
 #     return "".join(str(b) for b in modbin)
     
-    
+def binarychangelsb(binary,bit):
+        #normalizes binary to 8 digits (API can return binary values with less than 8 bits)
+    length = len(str(binary))
+    if len(str(binary)) != 8 :
+        modbin = ((8-length)*"0")+str(binary)
+    #edit lsb
+    modbin = list(str(binary))
+    modbin[-1] = str(bit)
+    #join back together and return answer as a single string 
+    return "".join(str(b) for b in modbin)  
     
         
         
@@ -44,7 +51,7 @@ def pixelTest():
         
     
 
-# binarychangelsb("01001101",0)
+print(int(binarychangelsb("01001101",0),base=2))
   
   
         

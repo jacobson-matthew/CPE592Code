@@ -1,3 +1,6 @@
+from contextlib import redirect_stderr
+from threading import currentThread
+from xml.etree.ElementPath import get_parent_map
 from PIL import Image 
 import sys
 #USAGE = python3 steno.py [image filename] [word/name] [lsb/msb] [encode/decode]
@@ -40,7 +43,6 @@ def strtobitstream(inputString):
 
 def binarychangelsb(binary,bit):
     #normalizes binary to 8 digits (API can return binary values with less than 8 bits)
-    print(binary)
     length = len(str(binary))
     if len(str(binary)) != 8 :
         modbin = ((8-length)*"0")+str(binary)
@@ -52,7 +54,6 @@ def binarychangelsb(binary,bit):
         
 def binarychangemsb(binary,bit):
     #normalizes binary to 8 digits (API can return binary values with less than 8 bits)
-    print(binary)
     length = len(str(binary))
     if len(str(binary)) != 8 :
         modbin = ((8-length)*"0")+str(binary)
@@ -64,7 +65,10 @@ def binarychangemsb(binary,bit):
         
 #encode data into image for given technique
 def encode(filename,word,technique): 
+    #convert the word to a form that we can put into the pixels
     info = list(strtobitstream(word))
+    #variable to keep track of where we are in the information that we have to encode
+    infopos = 0
     #load image 
     im = Image.open(filename)
     pixels = im.load()
@@ -84,9 +88,52 @@ def encode(filename,word,technique):
         print(info)
         for q in range(x,y): # for pixel location in range x -> y 
            #now take pixels and edit them with lsb information 
-           #grab current pixel curr @ (q,z) 
-           curr = pixels[q,z]
-           #now trim values
+           #grab current pixel rgb values curr @ (q,z) 
+           curr = list(pixels[q,z])
+           #now for each pixel in the range (which is the exact amount needed to encode bits) turn to binary and make change 
+           newred = bin(curr[0])[2:]
+           newgreen = bin(curr[1])[2:]
+           newblue = bin(curr[2])[2:] 
+           print("------")
+           print(str(newred)+" "+str(newgreen)+" "+str(newblue))
+           red = binarychangelsb(newred,info[infopos])
+           infopos+=1
+           green = binarychangelsb(newgreen,info[infopos])
+           infopos+=1
+           blue =  binarychangelsb(newred,info[infopos])
+           if infopos == len(info)-1:
+            break
+           else:
+                infopos+=1
+           print(red+" "+green+" "+blue)
+           print("------")
+           
+           
+        #    currred =  curr[0]
+        #    currgreen = curr[1] 
+        #    currblue =  curr[2]
+        #    print("curr values")
+        #    print(bin(currred)[2:])
+        #    print(bin(currgreen)[2:])
+        #    print(bin(currred)[2:])
+        #    print('-------')
+        #    #encode each bit into the lsb of the pixel information  
+        #    #this can be done with a loop but written out for testing purposes
+        #    newred =  binarychangelsb(bin(currred)[2:],info[infopos])
+        #    infopos+=1
+        #    newgreen = binarychangelsb(bin(currgreen)[2:],info[infopos])
+        #    infopos+=1
+        #    newblue =  binarychangelsb(bin(currblue)[2:],info[infopos])
+        #    infopos+=1
+        #    print("New values: ")
+        #    print(newred)
+        #    print(newred)
+        #    print(newblue)
+        #    print('-------')
+
+            
+               
+        
            
            
            
@@ -99,8 +146,15 @@ def encode(filename,word,technique):
         print("msb")
         
 #decode data out of an image for a given technique    
-def decode(filename,technique):
-    None
+def decode(filename,technique,lengthofkey):
+    #load image 
+    im = Image.open(filename)
+    pixels = im.load()
+    #check for technique
+    if technique == lsb :
+        #now for the length grab values and concat them 
+        None
+    
 
 def main():
     if len(sys.argv) != 5:
