@@ -1,6 +1,6 @@
 import sys
 from PIL import Image 
-
+#test
 im = Image.open("blue.jpg")
 
 def pixelTest():
