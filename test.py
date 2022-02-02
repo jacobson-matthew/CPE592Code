@@ -3,19 +3,58 @@ from PIL import Image
 
 im = Image.open("blue.jpg")
 
-pixels = im.load()
+def pixelTest():
+    pixels = im.load()
 
-mypixels = []
+    mypixels = []
 
-for i in range(0, 10): 
-        mypixels.append(pixels[i, 0])
+    for i in range(0, 10): 
+            mypixels.append(pixels[i, 0])
+            
+    for x in mypixels : 
+        for z in str(x)[1:-1].split(','):
+            value = list(str(bin(int(z))))
+            value[-1] = "1"
+            ''.join(value)
+            print(value)
+        print(" ")
         
-for x in mypixels : 
-    for z in str(x)[1:-1].split(','):
-         value = bin(int(z))
-         print(value)
-         
-    print(" ")
+        
+        
+        
+        
+  
+# def binarychangelsb(binary,bit):
+#     #normalizes binary to 8 digits (API can return binary values with less than 8 bits)
+#     print(binary)
+#     length = len(str(binary))
+#     if len(str(binary)) != 8 :
+#         modbin = ((8-length)*"0")+str(binary)
+#     #edit lsb
+#     modbin = list(str(binary))
+#     modbin[-1] = str(bit)
+#     return "".join(str(b) for b in modbin)
+    
+    
+    
+        
+        
+        
+        
+        
+    
+
+# binarychangelsb("01001101",0)
+  
+  
+        
+# pixelTest()
+
+# def strtobitstream(inputString):
+#     # this magic line is from https://www.geeksforgeeks.org/python-convert-string-to-binary/ using byte array to convert each character in a string to binary effeicently
+#     return str(''.join(format(i, '08b') for i in bytearray(inputString, encoding ='utf-8')))
+
+# print(list(strtobitstream("Matthew")))
 
 # temp = list(c)
 # print(temp)

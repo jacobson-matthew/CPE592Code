@@ -36,11 +36,35 @@ wtf was the input, there arent any other options
 #     return done
 def strtobitstream(inputString):
     # this magic line is from https://www.geeksforgeeks.org/python-convert-string-to-binary/ using byte array to convert each character in a string to binary effeicently
-    return str(''.join(format(i, '08b') for i in bytearray(inputString, encoding ='utf-8')))\
-    
-#encode data into image for given technique 
+    return str(''.join(format(i, '08b') for i in bytearray(inputString, encoding ='utf-8')))
+
+def binarychangelsb(binary,bit):
+    #normalizes binary to 8 digits (API can return binary values with less than 8 bits)
+    print(binary)
+    length = len(str(binary))
+    if len(str(binary)) != 8 :
+        modbin = ((8-length)*"0")+str(binary)
+    #edit lsb
+    modbin = list(str(binary))
+    modbin[-1] = str(bit)
+    #join back together and return answer as a single string 
+    return "".join(str(b) for b in modbin)
+        
+def binarychangemsb(binary,bit):
+    #normalizes binary to 8 digits (API can return binary values with less than 8 bits)
+    print(binary)
+    length = len(str(binary))
+    if len(str(binary)) != 8 :
+        modbin = ((8-length)*"0")+str(binary)
+    #edit lsb
+    modbin = list(str(binary))
+    modbin[0] = str(bit)
+    #join back together and return answer as a single string 
+    return "".join(str(b) for b in modbin)        
+        
+#encode data into image for given technique
 def encode(filename,word,technique): 
-    info = strtobitstream(word)
+    info = list(strtobitstream(word))
     #load image 
     im = Image.open(filename)
     pixels = im.load()
@@ -53,12 +77,22 @@ def encode(filename,word,technique):
     # default zero, can increase security by tying the height to the key being encoded (idk just a suggestion)
     z = 0
     #now get these pixel values
-    for i in range(x, y): 
-        print(pixels[i, z])
+    # for i in range(x, y): 
+    #     print(pixels[i, z])
     #if lsb, encode via lsb
     if technique == "lsb":
-       for q in range(x,y):
+        print(info)
+        for q in range(x,y): # for pixel location in range x -> y 
+           #now take pixels and edit them with lsb information 
+           #grab current pixel curr @ (q,z) 
            curr = pixels[q,z]
+           #now trim values
+           
+           
+           
+           
+           
+           
            
     #if msb, encode via msb
     if technique == "msb":
