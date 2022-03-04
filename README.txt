@@ -19,3 +19,8 @@ jpg format), and the secret (stego) key. Write the reasoning asked in part (b).
 (c) Submit your source code, input image, and output stego images.
 
 Assignment 2: 
+
+1) Write a program to encrypt and decrypt your full name using RSA encryption. Use the parameters provided in the example given in the course notes (RSA.pdf) (5 points)
+
+2) Which one you will prefer to use "Data Encryption" or "WaterMarking"?  Please write down one scenario for each of these mechanisms when one is preferred over the other.  (5 points)
+
