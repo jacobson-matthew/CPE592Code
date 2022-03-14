@@ -1,7 +1,14 @@
 import sys
 from PIL import Image 
-#test
+
 im = Image.open("blue.jpg")
+pixels = im.load()
+
+for i in range(100, 300): 
+    pixels[i, 50] = (255, 0, 0)
+
+im.save("pixel_grid.png")
+
 
 # def pixelTest():
 #     pixels = im.load()
@@ -33,16 +40,16 @@ im = Image.open("blue.jpg")
 #     modbin[-1] = str(bit)
 #     return "".join(str(b) for b in modbin)
     
-def binarychangelsb(binary,bit):
-        #normalizes binary to 8 digits (API can return binary values with less than 8 bits)
-    length = len(str(binary))
-    if len(str(binary)) != 8 :
-        modbin = ((8-length)*"0")+str(binary)
-    #edit lsb
-    modbin = list(str(binary))
-    modbin[-1] = str(bit)
-    #join back together and return answer as a single string 
-    return "".join(str(b) for b in modbin)  
+# def binarychangelsb(binary,bit):
+#         #normalizes binary to 8 digits (API can return binary values with less than 8 bits)
+#     length = len(str(binary))
+#     if len(str(binary)) != 8 :
+#         modbin = ((8-length)*"0")+str(binary)
+#     #edit lsb
+#     modbin = list(str(binary))
+#     modbin[-1] = str(bit)
+#     #join back together and return answer as a single string 
+#     return "".join(str(b) for b in modbin)  
     
         
         
@@ -51,7 +58,7 @@ def binarychangelsb(binary,bit):
         
     
 
-print(int(binarychangelsb("01001101",0),base=2))
+# print(int(binarychangelsb("01001101",0),base=2))
   
   
         
