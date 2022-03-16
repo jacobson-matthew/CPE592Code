@@ -1,0 +1,22 @@
+2) Which one you will prefer to use "Data Encryption" or "WaterMarking"?  
+Please write down one scenario for each of these mechanisms when one is preferred 
+over the other.  (5 points)
+
+I personally prefer encryption because you cant replicate what you cant access. While 
+encryption has its downfalls when you want media to be shareable, I think that confidentiality
+of information is very import.
+
+In the case where data encryption is better over watermarking is when you want to 
+keep the confidentiality of the information secure from an unathorized user. Lets
+say a message is watermarked but not encrypted, the adversary can still view the 
+secret information and if we see his message we know he intercepted it because it has 
+our watermark. But regardless the adversary can still see the secret information contained inside 
+the message and if it is time sensitive this could be very detrimental
+
+In the next case where watermarking is better over encryption is the case when
+you want the information to be available but uniquely identified. The most common example
+of this is sharing photos on the internet. Let's say you are a photographer and you want to post 
+your pictures on your professional website. You dont want to encrypt the information because
+you want it to be visible to others but you also dont want your work to be easily reproduceable. 
+Watermarking is the optimal solution for this by uniquely identifying it and not allowing the watermark to be 
+easily removed.

@@ -1,16 +1,128 @@
+""" Matthew Jacobson CPE Coding assignment 3"""
+"""I pledge my honor that I have abided by the stevens honor system"""
+"""Only thing you need to pass in is a file with the text you want to encrypt
+    All sources that I used are linked as comments in the program next to or near the line that uses that information 
+    Only problem with my program generates large numbers that fulfill the math from rsa.pdf but are too large 
+    to convert back to str for a ascii ciphertext
+"""
+#imports
 import math
 from sys import argv
+# Im using a library for generating large primes for ease of use and for speed reasons
+#this can be installed via pip install pycrypto
+#https://pypi.org/project/pycrypto/
+from Crypto.Util import number
+#need this little quick fix to change the deprecation of time.clock in python3.7 vs python3.8
+#cant find the link again but it was in a stackexchange to fix this deprecation error
+import time
+time.clock = time.time
 
+#https://stackoverflow.com/questions/4798654/modular-multiplicative-inverse-function-in-python
+#while reseraching methods on how to do this I discovered that Math.pow has a 3rd argument in this link ^^
+# documentation here https://en.wikibooks.org/wiki/Algorithm_Implementation/Mathematics/Extended_Euclidean_algorithm#Python
+# if check came from below link
+# https://www.geeksforgeeks.org/multiplicative-inverse-under-modulo-m/#:~:text=Given%20two%20integers%20'a'%20and,integer%20'x'%20such%20that.&text=The%20multiplicative%20inverse%20of%20%E2%80%9Ca,%2C%20m)%20%3D%201).
+def multinverse(a,b):
+    temp = math.gcd(a,b)
+    if(temp != 1):
+        return 0
+    else:
+        return pow(a,-1,b)
+#encrypt
+def encrypt(plaintext): 
+    """Step1: Choose two large prime numbers “p” and “q” so that the product is equal to the integer
+“n”, i.e., n = pq. The plaintext to be encrypted, say, “P” is represented as an integer less than “n.”
+(This means “n” must be a large number) 
+    """
+    #gen prime generates large prime numbers so that the product can equal N (our very large prime)
+    p = number.getPrime(50)
+    q = number.getPrime(50)
+    print("P: "+str(p))
+    print("Q: "+str(q))
+    n = p*q
+    print ("P*Q ="+str(n))
+    """
+    Step2: Find a number “e” that is relatively prime to the produce (p-1)(q-1). Note that two
+numbers are said to be relatively prime if they have no common factors except 1. The public key
+is then given by {e,n}. 
+    """
+    #produce the number
+    relprime = (p-1)*(q-1)
+    print("(p-1)(q-1) = "+str(relprime))
+    #now find the number that is relatively prime, for this example we can keep the number small ( less than 30)
+    #iterate through the numbers (excluding one) that are less than 20 to find a number that is relatively prime (gcd == 1 )
+    e = 0 
+    for x in range(2,30):
+        if math.gcd(x,relprime) == 1:
+            e = x
+            break
+        
+    #now that I have e and N, this is now the pubic key
+    publickey = [e,n]
+    
+    """
+    Step3: Find a number “d” such that the product de = 1 mod ((p-1)(q-1)). That is, “d” and “e” are
+multiplicative inverses of each other modulo (p-1)(q-1). The private key is then {d,n}. 
+    """
+    #now find the private key 
+    #to find this find d which is the multiplicative inverses 
+    # guidance to find de = 1 mod (p-1)(q-1) I got from here
+    # https://math.stackexchange.com/questions/818293/how-do-i-find-the-inverse-of-e-bmod-p-1q-1
+    # from this stack exchange discussion I discovered that pow() in python 3.8 can take an 
+    # extra arguemnt to achive a multiplicative inverse mod a number
+    #https://stackoverflow.com/questions/4798654/modular-multiplicative-inverse-function-in-python
+    #take the multiplictive inverse of e and relprime
+    
+    d = multinverse(e,relprime) % relprime
+    
+    #now I have d and n 
+    privatekey = [d,n]
 
+    print("Public Key: [e,n] "+str(publickey))
+    
+    print("Private Key: [d,n] "+str(privatekey))
+    """ 
+    now that I have all of my numbers, convert the plaintext into ciphertext
+    """
+    #use ord to get the numbers of the 
+    print("NOW ENCRYPT PLAINTEXT: "+plaintext)
+    convert = []
+    for x in plaintext:
+        convert.append(ord(x))
+    print(convert)
+    """
+     Encryption: Ciphertext, C = P^e (mod n)
+    """
+    #preform the C = P^e (mod n) operation on all int representations of the letters in the plaintext
+    encryption = []
+    for y in convert: 
+        ciph = pow(y,e) % n
+        encryption.append(str(ciph))
+    #now convert them back to characters
+    print("Ciphertext: ")
+    print(encryption)
+    # printableencryp = []
+    # for z in encryption: 
+    #     printableencryp.append(str(chr(z)))
+    # #print out the output
+    # print(printableencryp)
+    
 def main():
-    print("Encrypt RSA")
-    print("Usage: [parameter,parmeter,plaintex to be encrypted]")
-    
-    
-    
-    
-    
-    
-    
+    #instructions
+    print("Encrypt RSA with autogenerated keys and other information for security")
+    print("Usage: rsa.py [file for encryption,encrypt/decrypt]")
+    print("Test command python3.rsa.py input.txt encrypt")
+    #open file for reading only
+    if str(argv[2])=='encrypt':
+        plaintext = "" 
+        with open(argv[1],'r') as file: 
+            line = file.read()
+            plaintext += line+" "
+            file.close()
+        #preform encryption
+        encrypt(plaintext)
+    else: 
+        print("Incorrect usage please refer to the usage above")
+        
 if __name__ == "__main__":
     main()
